@@ -3,10 +3,16 @@
     <div class="columns">
       <div class="column">
         <vueDropzone
-          ref="myVueDropzone"
-          id="dropzone"
           :options="dropzoneOptions"
+          @vdropzone-success="onFileSuccess"
         />
+      </div>
+    </div>
+    <div class="columns">
+      <div class="column" v-for="image in images" :key="image.path">
+        <figure class="image">
+          <img :src="`/images/${image.path}`" alt="" />
+        </figure>
       </div>
     </div>
   </div>
@@ -22,16 +28,15 @@ export default {
   },
   data() {
     return {
+      images: [],
       dropzoneOptions: {
-        url: "/api/uploads"
+        url: "/api/uploads/gifs"
       }
     };
   },
   methods: {
-    testApi() {
-      this.$http.get("/api").then(resp => {
-        console.log(resp.data);
-      });
+    onFileSuccess(file, response) {
+      this.images.push(response);
     }
   }
 };
