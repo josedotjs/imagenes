@@ -5,19 +5,6 @@
         <div class="form">
           <div class="field is-grouped is-grouped-centered">
             <div class="control">
-              <label for="" class="label is-small">Tipo</label>
-              <div class="select">
-                <select name="" id="" @input="onSelectFit">
-                  <option
-                    :value="fit.label"
-                    v-for="fit in fits"
-                    :key="fit.label"
-                    >{{ fit.label }}</option
-                  >
-                </select>
-              </div>
-            </div>
-            <div class="control">
               <label for="" class="label is-small">Ancho</label>
               <input
                 class="input"
@@ -48,11 +35,10 @@
         </div>
       </div>
     </div>
+
     <div class="columns">
       <div class="section">
-        <div class="field is-grouped is-grouped-centered">
-          <verte v-model="backgroundColorImage" />
-        </div>
+        <div class="field is-grouped is-grouped-centered"></div>
       </div>
       <div class="column">
         <vueDropzone
@@ -64,12 +50,19 @@
         />
       </div>
     </div>
+
+    <div class="columns">
+      <div class="column">
+        <verte v-model="backgroundColorImage" />
+      </div>
+    </div>
+
     <div class="columns" v-for="imgSet in images" :key="imgSet.id">
       <div
         class="column"
         v-for="image in imgSet"
         :key="image.path"
-        :style="{ 'background-color': backgroundColorImage }"
+        :style="{'background-color': backgroundColorImage}"
       >
         <div class="item">
           <figure class="image">
@@ -96,70 +89,44 @@
 </template>
 
 <script>
-import vue2Dropzone from "vue2-dropzone";
-import Verte from "verte";
-import shortid from "shortid";
-import "verte/dist/verte.css";
-import "vue2-dropzone/dist/vue2Dropzone.min.css";
+import vue2Dropzone from 'vue2-dropzone'
+import Verte from 'verte'
+import shortid from 'shortid'
+import 'verte/dist/verte.css'
+import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 
 export default {
   components: {
     vueDropzone: vue2Dropzone,
-    Verte
+    Verte,
   },
   data() {
-    const fits = [
-      {
-        label: "cover",
-        hasBackground: true
-      },
-      {
-        label: "contain",
-        hasBackground: true
-      },
-      {
-        label: "fill",
-        hasBackground: false
-      },
-      {
-        label: "inside",
-        hasBackground: false
-      },
-      {
-        label: "outside",
-        hasBackground: false
-      }
-    ];
-    const selectedFit = fits[0];
     return {
-      backgroundColorImage: "#000000",
-      fits: fits,
+      backgroundColorImage: '#000000',
       images: [],
-      selectedFit: selectedFit,
       width: 600,
       height: 600,
-      color: "#000000",
+      color: '#000000',
       dropzoneOptions: {
-        url: "/api/uploads/resize"
-      }
-    };
+        url: '/api/uploads/resize',
+      },
+    }
   },
   methods: {
     onFileSuccess(file, response) {
-      response.id = shortid.generate();
-      this.images.push(response);
+      response.id = shortid.generate()
+      this.images.unshift(response)
     },
     onSelectFit(e) {
-      this.selectedFit = this.fits.find(f => f.label === e.target.value);
+      this.selectedFit = this.fits.find(f => f.label === e.target.value)
     },
     sendingEvent(file, xhr, formData) {
-      formData.append("width", this.width);
-      formData.append("height", this.height);
-      formData.append("fit", this.selectedFit.label);
-      formData.append("color", this.color);
-    }
-  }
-};
+      formData.append('width', this.width)
+      formData.append('height', this.height)
+      formData.append('color', this.color)
+    },
+  },
+}
 </script>
 
 <style scoped>

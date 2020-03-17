@@ -2,20 +2,14 @@
   <div class="container">
     <div class="columns">
       <div class="column">
+        <div>
+          <verte v-model="color" />
+        </div>
         <vueDropzone
           :options="dropzoneOptions"
           @vdropzone-success="onFileSuccess"
+          @vdropzone-sending="sendingEvent"
         />
-      </div>
-    </div>
-    <div class="columns" v-for="(imagePack, idx) in images" :key="idx">
-      <div class="column" v-for="image in imagePack" :key="image.fileName">
-        <figure class="image">
-          <img :src="`/images/${image.fileName}`" alt="" />
-        </figure>
-        <div>
-          <b>{{ image.format }}</b> {{ image.size }} bytes
-        </div>
       </div>
     </div>
   </div>
@@ -24,22 +18,26 @@
 <script>
 import vue2Dropzone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
+import Verte from 'verte'
+import 'verte/dist/verte.css'
 
 export default {
   components: {
+    Verte,
     vueDropzone: vue2Dropzone,
   },
   data() {
     return {
+      color: 'white',
       images: [],
       dropzoneOptions: {
-        url: '/api/uploads/gifs',
+        url: '/api/uploads/color',
       },
     }
   },
   methods: {
-    onFileSuccess(file, response) {
-      this.images.push(response)
+    sendingEvent(file, xhr, formData) {
+      formData.append('color', this.color)
     },
   },
 }

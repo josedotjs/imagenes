@@ -1,42 +1,56 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import IndexPage from "../views/IndexPage.vue";
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import IndexPage from '../views/IndexPage.vue'
 
-Vue.use(VueRouter);
+Vue.use(VueRouter)
 
 const routes = [
   {
-    path: "/",
-    name: "index",
-    component: IndexPage
+    path: '/',
+    name: 'index',
+    component: IndexPage,
   },
   {
-    path: "/resize",
-    name: "resize",
+    path: '/resize',
+    name: 'resize',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/ResizePage.vue")
+      import(/* webpackChunkName: "about" */ '../views/ResizePage.vue'),
   },
   {
-    path: "/composition",
-    name: "composition",
+    path: '/composition',
+    name: 'composition',
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/CompositionPage.vue")
+      import(/* webpackChunkName: "about" */ '../views/CompositionPage.vue'),
   },
   {
-    path: "/gifs",
-    name: "gifs",
+    path: '/gifs',
+    name: 'gifs',
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/AnimatedGif.vue")
-  }
-];
+      import(/* webpackChunkName: "about" */ '../views/AnimatedGif.vue'),
+  },
+  {
+    path: '/operations',
+    name: 'operations',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/OperationsPage.vue'),
+  },
+  {
+    path: '/color',
+    name: 'color',
+    component: () =>
+      import(
+        /* webpackChunkName: "colour" */ '../views/ColourManipulation.vue'
+      ),
+  },
+]
 
 const router = new VueRouter({
-  mode: "history",
+  mode: 'history',
   base: process.env.BASE_URL,
-  routes
-});
+  routes,
+})
 
-export default router;
+export default router

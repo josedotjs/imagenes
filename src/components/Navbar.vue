@@ -23,7 +23,7 @@
         <span aria-hidden="true"></span>
       </a>
     </div>
-    <div class="navbar-menu" :class="{ 'is-active': isActive }">
+    <div class="navbar-menu" :class="{'is-active': isActive}">
       <!-- navbar start, navbar end -->
       <div class="navbar-start">
         <router-link class="navbar-item" to="/">
@@ -34,6 +34,12 @@
         </router-link>
         <router-link class="navbar-item" to="/composition">
           Composition
+        </router-link>
+        <router-link class="navbar-item" to="/operations">
+          Operations
+        </router-link>
+        <router-link class="navbar-item" to="/color">
+          Color
         </router-link>
         <router-link class="navbar-item" to="/gifs">
           Gifs
@@ -50,10 +56,10 @@
 export default {
   data() {
     return {
-      isActive: false
-    };
-  }
-};
+      isActive: false,
+    }
+  },
+}
 </script>
 
 <style></style>
