@@ -85,50 +85,61 @@ exports.resize = [
 exports.composition = [
   imageUpload.single('file'),
   (req, res, next) => {
-    let watermark
-    const whaterMarkFilePath = path.join(
+    const pathFileWaterMark = path.join(
       destPath,
-      path.basename('banderabeerjs.svg'),
+      path.basename(req.body.waterMarkFileName),
     )
-    const destinationFile = path.join(destPath, `${+new Date()}.webp`)
-    const imageInfo = sharp(req.file.path).metadata()
+    Promise.all([
+      sharp(req.file.path).metadata(),
+      sharp(pathFileWaterMark).metadata(),
+    ])
+      .then(metadatas => {
+        // Creo el buffer de la marca de agua
+        let width
+        let height
 
-    imageInfo
-      .then(metadata => {
-        watermark = new Buffer.from(`<svg>
-      <rect x="0" y="0" width="500" height="100" fill="rgba(0,0,0,0)"  text-align="center" />
-      <text x="10" y="76" font-size="74" fill="${req.body.textColor}" font-family = "Verdana" 
-      style="fill-opacity:1;stroke:#000000;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;">
-      ${req.body.text}
-      </text>
-    </svg>`)
-        return sharp(whaterMarkFilePath)
+        if (req.body && req.body.fitToDest === 'true') {
+          width = metadatas[0].width
+          height = metadatas[0].height
+        } else {
+          width = Math.min(metadatas[0].width, metadatas[1].width)
+          height = Math.min(metadatas[0].height, metadatas[1].height)
+        }
+        sharp(pathFileWaterMark)
           .resize({
-            width: metadata.width,
-            height: metadata.height,
+            width,
+            height,
             fit: 'cover',
           })
           .toBuffer()
-      })
-      .then(bufferWM => {
-        const file = sharp(req.file.path).composite([
-          {
-            input: bufferWM,
-            gravity: 'east',
-            blend: req.body.blend,
-          },
-          {
-            input: watermark,
-            gravity: req.body.gravity,
-            tile: req.body.tile === 'true',
-            blend: 'over',
-          },
-        ])
-        file
-          .webp()
-          .toFile(destinationFile)
-          .then(fileInfo => {
-            res.status(200).json(path.basename(destinationFile))
+          .then(bufferWM => {
+            // Creo también el buffer del texto
+            const bufferTexto = new Buffer.from(`<svg>
+        <rect x="0" y="0" width="500" height="100" fill="rgba(0,0,0,0)"  text-align="center" />
+        <text x="10" y="76" font-size="74" fill="${req.body.textColor}" font-family = "Impact" 
+        style="fill-opacity:1;stroke:#000000;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;">
+        ${req.body.text}
+        </text>
+        </svg>`)
+
+            const destFile = path.join(destPath, `${+new Date()}.webp`)
+            // Finalmente compongo la imagen
+            sharp(req.file.path)
+              .composite([
+                {
+                  input: bufferWM,
+                  tile: req.body.tile === 'true',
+                  gravity: req.body.ubicacionMarca,
+                },
+                {
+                  input: bufferTexto,
+                  gravity: req.body.gravity,
+                },
+              ])
+              .toFile(destFile)
+              .then(imageInfo => {
+                res.status(200).json(path.basename(destFile))
+              })
           })
       })
       .catch(e => next(e))
@@ -160,11 +171,16 @@ exports.gifs = [
           // console.log(metadatas)
           metadatas[0].fileName = path.basename(req.file.path)
           metadatas[1].fileName = path.basename(destFile)
-
+          results.push({
+            type: 'origen',
+            size: fs.statSync(req.file.path).size,
+            format: 'gif',
+            fileName: path.basename(req.file.path),
+          })
           // metadatas[0].size = imageData.size
           // metadatas[1].size = imageData.size
 
-          res.status(200).json({metadatas, results})
+          res.status(200).json(results)
         })
       })
       .catch(e => next(e))
@@ -182,8 +198,9 @@ exports.operations = [
         name: 'sharpen',
         params: 2,
       },
-      {name: 'median', params: 10},
       {name: 'blur', params: 20},
+
+      {name: 'median', params: 10},
       {
         name: 'flatten',
         params: {
@@ -243,9 +260,10 @@ exports.operations = [
       sharpObject[operation.name](operation.params)
       return sharpObject.webp().toFile(destFile)
     })
+    console.time('operations')
     Promise.all(files)
       .then(resp => {
-        console.log(resp)
+        console.timeEnd('operations')
         const response = operations.map((operation, idx) => {
           return {
             operationName: operation.name,
@@ -309,7 +327,7 @@ exports.pop = [
             }
           })
           .then(({metadata, buffer}) => {
-            const colors = ['yellow', 'orange', 'blue', 'red']
+            const colors = ['yellow', 'red', 'orange', 'blue']
             const images = colors.map(color => {
               return sharp(buffer)
                 .tint(color)
@@ -329,7 +347,7 @@ exports.pop = [
                 create: {
                   width: metadata.width * 2,
                   height: metadata.height * 2,
-                  background: 'white',
+                  background: req.body.backgroundColor,
                   channels: 4,
                 },
               })

@@ -1,5 +1,14 @@
 <template>
   <div class="container">
+    <div class="columns" style="margin-top: 3rem;">
+      <div class="column is-6-desktop is-offset-3-desktop">
+        <div class="notification is-info">
+          Cambia la imagen al tamaño deseado (y la convierte en web). Además
+          muestra como se comportan los distintos tipos de fit
+        </div>
+      </div>
+    </div>
+
     <div class="columns">
       <div class="column">
         <div class="form">

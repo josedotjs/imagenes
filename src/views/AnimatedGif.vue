@@ -1,10 +1,18 @@
 <template>
   <div class="container">
+    <div class="columns" style="margin-top: 3rem;">
+      <div class="column is-6-desktop is-offset-3-desktop">
+        <div class="notification is-info">
+          Convierte un gif animado en webp y compara tamaños
+        </div>
+      </div>
+    </div>
     <div class="columns">
       <div class="column">
         <vueDropzone
           :options="dropzoneOptions"
           @vdropzone-success="onFileSuccess"
+          id="dropzone"
         />
       </div>
     </div>
@@ -17,6 +25,9 @@
           <b>{{ image.format }}</b> {{ image.size }} bytes
         </div>
       </div>
+      <div class="column">
+        <chart-formats :data="imagePack" />
+      </div>
     </div>
   </div>
 </template>
@@ -24,9 +35,11 @@
 <script>
 import vue2Dropzone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
+import ChartFormats from '@/components/ChartFormats.vue'
 
 export default {
   components: {
+    ChartFormats,
     vueDropzone: vue2Dropzone,
   },
   data() {

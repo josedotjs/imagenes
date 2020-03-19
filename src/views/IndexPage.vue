@@ -1,6 +1,14 @@
 <template>
   <div class="container">
     <div class="columns">
+      <div class="column is-6-desktop is-offset-3-desktop">
+        <div class="notification is-info">
+          Convierte una imagen en distintos formatos para comparar
+          características
+        </div>
+      </div>
+    </div>
+    <div class="columns">
       <div class="column">
         <vueDropzone
           ref="myVueDropzone"

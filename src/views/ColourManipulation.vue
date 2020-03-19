@@ -6,10 +6,23 @@
           <verte v-model="color" />
         </div>
         <vueDropzone
+          id="dropzone"
           :options="dropzoneOptions"
           @vdropzone-success="onFileSuccess"
           @vdropzone-sending="sendingEvent"
         />
+      </div>
+    </div>
+    <div class="columns">
+      <div
+        class="column is-4-desktop is-6-tablet"
+        v-for="image in images"
+        :key="image"
+      >
+        <picture>
+          <source :srcset="`/images/${image}`" type="image/webp" />
+          <img :src="`/images/nosoportado.png`" alt="" />
+        </picture>
       </div>
     </div>
   </div>
@@ -38,6 +51,9 @@ export default {
   methods: {
     sendingEvent(file, xhr, formData) {
       formData.append('color', this.color)
+    },
+    onFileSuccess(file, response) {
+      this.images = response
     },
   },
 }

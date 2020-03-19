@@ -45,6 +45,12 @@ const routes = [
         /* webpackChunkName: "colour" */ '../views/ColourManipulation.vue'
       ),
   },
+  {
+    path: '/mix',
+    name: 'mix',
+    component: () =>
+      import(/* webpackChunkName: "mix" */ '../views/MixPage.vue'),
+  },
 ]
 
 const router = new VueRouter({

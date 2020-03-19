@@ -4,11 +4,11 @@
       <!-- navbar items, navbar burger... -->
       <router-link class="navbar-item" to="/">
         <img
-          src="https://bulma.io/images/bulma-logo.png"
-          alt="Bulma: Free, open source, and modern CSS framework based on Flexbox"
-          width="112"
+          src="https://beerjscba.com/statics/images/logo.1574320377158.svg"
+          alt="Beerjs Córdoba"
           height="28"
         />
+        <span style="margin-left: .5rem;"><b>BeerjsCba</b></span>
       </router-link>
 
       <a
@@ -27,7 +27,10 @@
       <!-- navbar start, navbar end -->
       <div class="navbar-start">
         <router-link class="navbar-item" to="/">
-          Inicio
+          Formatos
+        </router-link>
+        <router-link class="navbar-item" to="/gifs">
+          Gifs
         </router-link>
         <router-link class="navbar-item" to="/resize">
           Resize
@@ -41,8 +44,8 @@
         <router-link class="navbar-item" to="/color">
           Color
         </router-link>
-        <router-link class="navbar-item" to="/gifs">
-          Gifs
+        <router-link class="navbar-item" to="/mix">
+          Create
         </router-link>
       </div>
       <div class="navbar-end">

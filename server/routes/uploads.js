@@ -6,6 +6,7 @@ router.post('/resize', uploadsController.resize)
 router.post('/composition', uploadsController.composition)
 router.post('/gifs', uploadsController.gifs)
 router.post('/operations', uploadsController.operations)
-router.post('/color', uploadsController.pop)
+router.post('/color', uploadsController.color)
+router.post('/pop', uploadsController.pop)
 
 module.exports = router

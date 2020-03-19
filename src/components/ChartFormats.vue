@@ -33,7 +33,7 @@ export default {
             }),
           ],
           width: '100%',
-          height: 600,
+          height: 400,
           axisY: {
             labelInterpolationFnc: function(value) {
               const sizeInMB = value / (1024 * 1024)

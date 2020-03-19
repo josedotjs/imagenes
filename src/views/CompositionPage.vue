@@ -16,13 +16,6 @@
               </figure>
             </a>
           </div>
-          <div class="select">
-            <select v-model="selectedBlend">
-              <option :value="blend" v-for="blend in blends" :key="blend">{{
-                blend
-              }}</option>
-            </select>
-          </div>
         </div>
       </div>
       <div class="column">
@@ -31,7 +24,13 @@
           <div class="column">
             <div class="field is-grouped is-grouped-centered">
               <div class="control">
-                <gravity-combo v-model="ubicacion" />
+                <gravity-combo v-model="ubicacionMarca" />
+              </div>
+              <div class="control">
+                <label class="checkbox">
+                  <input type="checkbox" v-model="fitToDest" />
+                  Igualar al destino
+                </label>
               </div>
               <div class="control">
                 <label class="checkbox">
@@ -49,6 +48,9 @@
               </div>
               <div class="control">
                 <verte v-model="textColor" model="rgb" />
+              </div>
+              <div class="control">
+                <gravity-combo v-model="ubicacion" />
               </div>
             </div>
           </div>
@@ -68,10 +70,12 @@
     </div>
     <div class="columns is-multiline">
       <div class="column is-3" v-for="image in images" :key="image">
-        <picture>
-          <source :srcset="`/images/${image}`" :type="`image/webp`" />
-          <img :src="`/images/nosoportado.png`" alt="" />
-        </picture>
+        <a :href="`/images/${image}`" target="_blank">
+          <picture>
+            <source :srcset="`/images/${image}`" :type="`image/webp`" />
+            <img :src="`/images/nosoportado.png`" alt="" />
+          </picture>
+        </a>
       </div>
     </div>
   </div>
@@ -92,51 +96,22 @@ export default {
   },
   data() {
     return {
-      blends: [
-        'clear',
-        'source',
-        'over',
-        'in',
-        'out',
-        'atop',
-        'dest',
-        'dest-over',
-        'dest-in',
-        'dest-out',
-        'dest-atop',
-        'xor',
-        'add',
-        'saturate',
-        'multiply',
-        'screen',
-        'overlay',
-        'darken',
-        'lighten',
-        'colour-dodge',
-        'color-dodge',
-        'colour-burn',
-        'color-burn',
-        'hard-light',
-        'soft-light',
-        'difference',
-        'exclusion',
-      ],
       dropzoneOptions: {
         url: '/api/uploads/composition',
       },
       images: [],
       marcas: [
-        '/images/bandera_beerjscba.png',
-        '/images/marca2.png',
-        '/images/marca3.png',
-        '/images/marca4.png',
-        '/images/marca5.png',
-        '/images/marca5.svg',
+        '/images/banderabeerjs.svg',
+        '/images/marcabeerjs.png',
+        '/images/shley-tree-1.png',
+        '/images/little-pluses.png',
+        '/images/dark-wood.png',
       ],
-      nombreMarca: '/images/marca1.png',
+      nombreMarca: '/images/marcabeerjs.png',
+      fitToDest: false,
       repetir: false,
       ubicacion: 'center',
-      selectedBlend: 'over',
+      ubicacionMarca: 'center',
       texto: '',
       textColor: 'black',
     }
@@ -150,8 +125,9 @@ export default {
       formData.append('gravity', this.ubicacion)
       formData.append('text', this.texto)
       formData.append('tile', this.repetir)
-      formData.append('blend', this.selectedBlend)
       formData.append('textColor', this.textColor)
+      formData.append('fitToDest', this.fitToDest)
+      formData.append('ubicacionMarca', this.ubicacionMarca)
     },
   },
 }
