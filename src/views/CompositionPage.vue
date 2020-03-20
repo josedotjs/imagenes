@@ -2,11 +2,27 @@
   <div class="container">
     <div class="columns">
       <div class="column">
-        <h1 class="is-size-6">Marca de agua</h1>
         <div class="columns">
-          <div class="column " v-for="marca in marcas" :key="marca">
-            <a href="#" @click="nombreMarca = marca">
-              <figure
+          <div class="column" style="margin-top: 3rem;">
+            <div class="field is-grouped is-grouped-centered">
+              <div class="control">
+                <div class="dropdown" :class="{'is-active': showDropdownMarca }">
+            <div class="dropdown-trigger">
+              <button class="button" aria-haspopup="true" aria-controls="dropdown-menu2" @click="showDropdownMarca = !showDropdownMarca">
+                <span>Marca</span>
+                <span class="icon is-small">
+                  <i class="fas fa-angle-down" aria-hidden="true"></i>
+                </span>
+              </button>
+            </div>
+            <div class="dropdown-menu" id="dropdown-menu2" role="menu">
+              <div class="dropdown-content">
+                <div class="dropdown-item" v-for="marca in marcas" :key="marca">
+                  <a  @click="() => {
+                    nombreMarca = marca
+                    showDropdownMarca = false
+                  }">
+                    <figure
                 class="image is-64x64 has-text-centered"
                 :class="{
                   'has-background-grey-lighter': marca === nombreMarca,
@@ -14,15 +30,20 @@
               >
                 <img :src="marca" />
               </figure>
-            </a>
+                  </a>
+                  
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div class="column">
-        <h1 class="is-size-6">Opciones</h1>
-        <div class="columns">
-          <div class="column">
-            <div class="field is-grouped is-grouped-centered">
+              </div>
+              <div class="control">
+                 <figure
+                class="image is-64x64 has-text-centered"
+              >
+                <img :src="nombreMarca" />
+              </figure>
+              </div>
               <div class="control">
                 <gravity-combo v-model="ubicacionMarca" />
               </div>
@@ -112,6 +133,7 @@ export default {
       repetir: false,
       ubicacion: 'center',
       ubicacionMarca: 'center',
+      showDropdownMarca: false,
       texto: '',
       textColor: 'black',
     }
